@@ -22,7 +22,7 @@ set(TINYCBOR_INCLUDE_DIRS
 )
 
 # OTA library source files, including 3rdparties.
-set( OTA_SOURCES
+set( OTA_CORE_LIBRARY_FILES
     "${CMAKE_CURRENT_LIST_DIR}/source/include/ota.h"
     "${CMAKE_CURRENT_LIST_DIR}/source/include/ota_os_interface.h"
     "${CMAKE_CURRENT_LIST_DIR}/source/include/ota_platform_interface.h"
@@ -32,6 +32,10 @@ set( OTA_SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/source/ota.c"
     "${CMAKE_CURRENT_LIST_DIR}/source/ota_interface.c"
     "${CMAKE_CURRENT_LIST_DIR}/source/ota_base64.c"
+)
+
+set( OTA_SOURCES
+    ${OTA_CORE_LIBRARY_FILES}
     ${JSON_SOURCES}
     ${TINYCBOR_SOURCES}
 )
@@ -42,11 +46,16 @@ set( OTA_INCLUDE_PUBLIC_DIRS
     "${CMAKE_CURRENT_LIST_DIR}/source/portable"
 )
 
+# Private directories required to build the OTA library.
+set( OTA_BUILD_PRIVATE_DIRS
+    ${OTA_INCLUDE_PRIVATE_DIRS}
+    ${JSON_INCLUDE_PUBLIC_DIRS}
+    ${TINYCBOR_INCLUDE_DIRS}
+)
+
 # OTA library private include directories.
 set( OTA_INCLUDE_PRIVATE_DIRS
     "${CMAKE_CURRENT_LIST_DIR}/source"
-    ${JSON_INCLUDE_PUBLIC_DIRS}
-    ${TINYCBOR_INCLUDE_DIRS}
 )
 
 # OTA library POSIX OS porting source files.
