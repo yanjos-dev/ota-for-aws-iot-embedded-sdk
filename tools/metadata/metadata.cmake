@@ -1,7 +1,7 @@
 #[[
-This script generates metadata that could be used for generating a CMSIS pack. The metadata includes
-dependencies on other repositories, files required to build the library, and include paths that must
-be added to the include path.
+This script generates and example of metadata that could be used for generating a CMSIS pack. The
+metadata in this example includes dependencies on other repositories, files required to build the
+library, and include paths that must be added to the include path.
 
 To run the script:
 1. cd to the root directory of the repository
@@ -17,8 +17,11 @@ This script does the following steps to create this file:
 2. Create a copy of the manifest.yml file that exists in the root of the library repository.
 3. Append the source files and include paths to the copy of the manifest.yml file.
 
-Note: This script does not include information for optional ports and dependencies such as the
-      FreeRTOS port.
+Notes: 
+       1) This script does not include information for optional ports and dependencies such as the
+       FreeRTOS port. Adding these items would be the same process that is shown below.
+       2) This example script is hosted in this repository, but this process could be done by a
+       cmake file that is external to this repository if the file paths are changed.
 ]]
 
 cmake_minimum_required(VERSION 3.13)
@@ -40,7 +43,7 @@ foreach( FILE IN LISTS OTA_CORE_LIBRARY_FILES)
     # Remove the local section of the path.
     string(REPLACE "${REPO_ROOT_DIR}" "" FILE ${FILE} )
     # Write the remaining relative path to the manifest.
-    file( APPEND ${METADATA_FILE} "\n  - ${FILE}" )
+    file( APPEND ${METADATA_FILE} "\n  - \"${FILE}\"" )
 endforeach()
 
 # Add the public include paths to the manifest.yml file
@@ -49,7 +52,7 @@ foreach( INCLUDE_DIR IN LISTS OTA_INCLUDE_PUBLIC_DIRS)
     # Remove the local section of the path.
     string(REPLACE "${REPO_ROOT_DIR}" "" INCLUDE_DIR ${INCLUDE_DIR} )
     # Write the remaining relative path to the manifest.
-    file( APPEND ${METADATA_FILE} "\n  - ${INCLUDE_DIR}" )
+    file( APPEND ${METADATA_FILE} "\n  - \"${INCLUDE_DIR}\"" )
 endforeach()
 
 # Add the private include paths to the manifest.yml file
@@ -58,7 +61,7 @@ foreach( INCLUDE_DIR IN LISTS OTA_INCLUDE_PRIVATE_DIRS)
     # Remove the local section of the path.
     string(REPLACE "${REPO_ROOT_DIR}" "" INCLUDE_DIR ${INCLUDE_DIR} )
     # Write the remaining relative path to the manifest.
-    file( APPEND ${METADATA_FILE} "\n  - ${INCLUDE_DIR}" )
+    file( APPEND ${METADATA_FILE} "\n  - \"${INCLUDE_DIR}\"" )
 endforeach()
 
 # Add a newline at the end of the file
